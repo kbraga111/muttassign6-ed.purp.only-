@@ -72,21 +72,21 @@ enum
 
 static char *Prompts[] =
 {
-  "From: ",
-  "To: ",
+  "This message is from: ",
+  "Who you gonna send this to?: ",
   "Cc: ",
   "Bcc: ",
   "Subject: ",
-  "Reply-To: ",
+  "Reply-To your boy: ",
   "Fcc: "
 };
 
 static struct mapping_t ComposeHelp[] = {
   { N_("Send"),    OP_COMPOSE_SEND_MESSAGE },
   { N_("Abort"),   OP_EXIT },
-  { "To",      OP_COMPOSE_EDIT_TO },
+  { "To Who",      OP_COMPOSE_EDIT_TO },
   { "CC",      OP_COMPOSE_EDIT_CC },
-  { "Subj",    OP_COMPOSE_EDIT_SUBJECT },
+  { "Subj. whats it about?",    OP_COMPOSE_EDIT_SUBJECT },
   { N_("Attach file"),  OP_COMPOSE_ATTACH_FILE },
   { N_("Descrip"), OP_COMPOSE_EDIT_DESCRIPTION },
   { N_("Help"),    OP_HELP },
