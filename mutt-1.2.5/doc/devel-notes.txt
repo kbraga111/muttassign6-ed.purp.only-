@@ -1,0 +1,169 @@
+Subject: Developers' notes
+From: Thomas Roessler <roessler@guug.de>
+Date: Fri,  6 Aug 1999 09:09:58 +0200
+
+
+Required tools
+--------------
+
+If you are planning to hack on mutt, please subscribe to the
+mutt-dev mailinglist (mutt-dev@mutt.org, contact
+majordomo@mutt.org).  Announcements about recent development
+versions go to that mailing list, as go technical discussions and
+patches.
+
+You'll need several GNU development utilities for working on mutt:
+
+- automake
+
+- autoconf
+
+- autoheader
+
+- The i18n stuff requires GNU gettext.  See intl/VERSION for the
+  version we are currently relying on.  Please note that using
+  gettext-0.10 will most probably not work - get the latest test
+  release from alpha.gnu.org, it's the recommended version of
+  gettext anyway.
+
+  If you are experiencing problems with unknown "dcgettext" symbols,
+  the autoconf/automake macros from your gettext package are broken.
+  Apply the following patch to that macro file (usually found under
+  /usr/share/aclocal/gettext.m4):
+
+--- gettext.m4.bak	Thu Jul  2 18:46:08 1998
++++ gettext.m4	Mon Oct  5 23:32:54 1998
+@@ -46,12 +46,13 @@
+ 
+ 	   if test "$gt_cv_func_gettext_libc" != "yes"; then
+ 	     AC_CHECK_LIB(intl, bindtextdomain,
+-	       [AC_CACHE_CHECK([for gettext in libintl],
+-		 gt_cv_func_gettext_libintl,
+-		 [AC_CHECK_LIB(intl, gettext,
+-		  gt_cv_func_gettext_libintl=yes,
+-		  gt_cv_func_gettext_libintl=no)],
++	       [AC_CHECK_LIB(intl, gettext,
++	         gt_cv_func_gettext_libintl=yes,
+ 		 gt_cv_func_gettext_libintl=no)])
++	   fi
++
++	   if test "$gt_cv_func_gettext_libintl" = "yes" ; then
++	     LIBS="-lintl $LIBS"
+ 	   fi
+ 
+ 	   if test "$gt_cv_func_gettext_libc" = "yes" \
+
+
+- GNU make may be needed for the dependency tricks
+
+
+Getting started from CVS
+------------------------
+
+Once you've checked out a copy of the source from CVS, you'll need to
+run the script called 'prepare' that is in the root directory.  The
+script does all the automake/autoconf magic that needs to be done with
+a fresh checkout.
+
+
+A word about warnings
+---------------------
+
+Mutt's default build process sets some pretty restrictive compiler
+flags which may lead to lots of warnings.  Generally, warnings are
+something which should be eliminated.
+
+Nevertheless, the code in intl/ is said to generate some warnings with
+the compiler settings we usually rely upon.  This code is not
+maintained by the mutt developpers, so please redirect any comments to
+the GNU gettext library's developpers.
+
+
+Style Guide
+-----------
+
+- global functions should have the prefix "mutt_".  All
+  other functions should be declared "static".
+
+- avoid global vars where possible.  If one is required,
+  try to contain it to a single source file and declare it
+  "static".  Global vars should have the first letter of
+  each word capitilized, and no underscores should be used
+  (e.g., MailGid, LastFolder, MailDir).
+
+- re-use code as much as possible.  There are a lot of
+  "library" functions. One of the biggest causes of bloat
+  in ELM and PINE is the tremendous duplication of code...
+  Help keep Mutt small!
+
+- when adding new options, make the old behaviour the
+  default.
+
+- try to keep mutt as portable as possible.
+
+
+Documentation
+-------------
+
+Please document your changes.  Note that there are several places
+where you may have to add documentation:
+
+- doc/manual.smgl.{head,tail} contain The Manual.
+
+- doc/muttrc.man.{head,tail} contain an abriged version of The
+  Manual in nroff format (see man(7)), which deals with
+  configuration file commands.
+
+Configuration _variables_ are documented directly in init.h.  The
+parts of The Manual and the muttrc manual page dealing with these
+variables, and the global Muttrc, are generated automatically from
+that documentation.  To start this process, type "make update-doc"
+in the top-level source directory.  
+
+Note that you may have to update the makedoc utility (makedoc.c)
+when adding new data types to init.h.
+
+More precisely, variable name, type, and default value are directly
+extracted from the initializer for the MuttVars array. Documentation
+is exepected in special comments which _follow_ the initializer.
+For a line to be included with the documentation, it must (after,
+possibly, some white space) begin with with either "/**" or "**".
+Any following white space is ignored. The rest of the line is
+expected to be plain text, with some formatting instructions roughly
+similar to [ntg]roff:
+
+ - \fI switches to italics
+ 
+ - \fB switches to boldface
+
+ - \fP switches to normal display
+
+ - \(as can be used to represent an asterisk (*).  This is intended
+   to help avoiding character sequences such as /* or */ inside
+   comments.
+
+ - \(rs can be used to represent a backslash (\).  This is intended
+   to help avoiding poblems when trying to represent any of the \
+   sequences used by makedoc.
+
+ - .ts on a line starts a "verbose tscreen" environment (name taken from
+   SGML).  Please try to keep lines inside such an environment
+   short; a length of abut 40 characters should be ok.  This is
+   necessary to avoid a really bad-looking muttrc (5) manual page.
+
+ - .te on a line finishes this environment.
+
+ - .pp on a line starts a paragraph.
+
+ - $word will be converted to a reference to word, where appropriate.
+   Note that $$word is possible as well.
+
+   (Not yet implemented in makedoc, but please use it nevertheless
+   when writing documentation!)
+
+ - '. ' in the beginning of a line expands to two space characters.
+   This is used to protect indentations in tables.
+
+Do _not_ use any other SGML or nroff formatting instructions here!
+
+$Id: devel-notes.txt,v 1.7 1999/08/08 14:00:38 roessler Exp $
