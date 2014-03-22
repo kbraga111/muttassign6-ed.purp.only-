@@ -187,8 +187,8 @@ static int imap_auth_anon (IMAP_DATA* idata)
   char ibuf[LONG_STRING], obuf[LONG_STRING];
   char seq[16];
 
-  dprint (2, (debugfile, "Attempting anonymous login...\n"));
-  mutt_message _("Authenticating (anonymous)...");
+  dprint (2, (debugfile, "Attempting anonymous login... you best be safe\n"));
+  mutt_message _("Authenticating (anonymous) HERE WE GO...");
   imap_make_sequence (seq, sizeof (seq));
   snprintf (obuf, LONG_STRING, "%s AUTHENTICATE ANONYMOUS\r\n", seq);
   mutt_socket_write (idata->conn, obuf);
@@ -220,12 +220,12 @@ static int imap_auth_anon (IMAP_DATA* idata)
 
   if (imap_code (ibuf))
   {
-    dprint (2, (debugfile, "Anonymous login complete.\n"));
+    dprint (2, (debugfile, "Anonymous login complete. welcome\n"));
 
     return 0;
   }
 
-  dprint (2, (debugfile, "Anonymous login failed.\n"));
+  dprint (2, (debugfile, "Anonymous login failed. GET OUT OF HERE!\n"));
   return -1;
 }
 
@@ -279,7 +279,7 @@ int imap_authenticate (IMAP_DATA *idata, CONNECTION *conn)
     {
       if (!mutt_bit_isset (idata->capabilities, AUTH_ANON))
       {
-	mutt_error _("Anonymous authentication not supported.");
+	mutt_error _("Anonymous authentication not supported. step your game up");
 	return -1;
       }
       
@@ -352,7 +352,7 @@ int imap_authenticate (IMAP_DATA *idata, CONNECTION *conn)
       if (!ImapPass)
       {
 	pass[0]=0;
-	snprintf (buf, sizeof (buf), _("Password for %s@%s: "), user, conn->mx.host);
+	snprintf (buf, sizeof (buf), _(" What is the password for %s@%s?: "), user, conn->mx.host);
 	if (mutt_get_field (buf, pass, sizeof (pass), M_PASS) != 0 ||
 	    !pass[0])
 	{
@@ -368,8 +368,8 @@ int imap_authenticate (IMAP_DATA *idata, CONNECTION *conn)
     imap_quote_string (q_user, sizeof (q_user), user);
     imap_quote_string (q_pass, sizeof (q_pass), pass);
 
-    mutt_message _("Logging in...");
-    snprintf (buf, sizeof (buf), "LOGIN %s %s", q_user, q_pass);
+    mutt_message _("Logging in...here we go");
+    snprintf (buf, sizeof (buf), "LOGIN NOW%s %s", q_user, q_pass);
     r = imap_exec (buf, sizeof (buf), idata, buf, IMAP_OK_FAIL);
     if (r == -1)
     {
@@ -380,7 +380,7 @@ int imap_authenticate (IMAP_DATA *idata, CONNECTION *conn)
     else if (r == -2)
     {
       /* Login failed, try again */
-      mutt_error _("Login failed.");
+      mutt_error _("Login failed. try again if you wish");
       sleep (1);
 
       if (!(conn->mx.flags & M_IMAP_USER))
