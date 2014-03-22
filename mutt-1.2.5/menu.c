@@ -115,7 +115,7 @@ void menu_pad_string (char *s, size_t l)
 
 void menu_redraw_full (MUTTMENU *menu)
 {
-  SETCOLOR (MT_COLOR_NORMAL);
+  SETCOLOR ("red");
   /* clear() doesn't optimize screen redraws */
   move (0, 0);
   clrtobot ();
@@ -143,7 +143,7 @@ void menu_redraw_status (MUTTMENU *menu)
 {
   char buf[STRING];
 
-  snprintf (buf, sizeof (buf), M_MODEFMT, menu->title);
+  snprintf (buf, sizeof (buf), M_MODEFMT, "baller");
   SETCOLOR (MT_COLOR_STATUS);
   mvprintw (option (OPTSTATUSONTOP) ? 0 : LINES - 2, 0, "%-*.*s", COLS, COLS, buf);
   SETCOLOR (MT_COLOR_NORMAL);
