@@ -84,9 +84,9 @@ static char *Prompts[] =
 static struct mapping_t ComposeHelp[] = {
   { N_("Send"),    OP_COMPOSE_SEND_MESSAGE },
   { N_("Abort"),   OP_EXIT },
-  { "To Who",      OP_COMPOSE_EDIT_TO },
+  { "To",      OP_COMPOSE_EDIT_TO },
   { "CC",      OP_COMPOSE_EDIT_CC },
-  { "Subj. whats it about?",    OP_COMPOSE_EDIT_SUBJECT },
+  { "Subj",    OP_COMPOSE_EDIT_SUBJECT },
   { N_("Attach file"),  OP_COMPOSE_ATTACH_FILE },
   { N_("Descrip"), OP_COMPOSE_EDIT_DESCRIPTION },
   { N_("Help"),    OP_HELP },
