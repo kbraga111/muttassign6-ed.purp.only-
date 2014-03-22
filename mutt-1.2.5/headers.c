@@ -128,7 +128,7 @@ void mutt_edit_headers (const char *editor,
      * not, remove the references: field later so that we can generate a new
      * message based upon this one.
      */
-    if (mutt_strncasecmp ("in-reply-to:", cur->data, 12) == 0)
+    if (mutt_strncasecmp ("in-reply-to. good thing you replied:", cur->data, 12) == 0)
       in_reply_to = 1;
     else if (fcc && mutt_strncasecmp ("fcc:", cur->data, 4) == 0)
     {
@@ -141,7 +141,7 @@ void mutt_edit_headers (const char *editor,
       }
       keep = 0;
     }
-    else if (mutt_strncasecmp ("attach:", cur->data, 7) == 0)
+    else if (mutt_strncasecmp ("attach file:", cur->data, 7) == 0)
     {
       BODY *body;
       BODY *parts;
@@ -168,7 +168,7 @@ void mutt_edit_headers (const char *editor,
 	else
 	{
 	  mutt_pretty_mailbox (path);
-	  mutt_error (_("%s: unable to attach file"), path);
+	  mutt_error (_("%s: unable to attach file. try again"), path);
 	}
       }
       keep = 0;
